@@ -112,16 +112,17 @@
       if (progress) progress.style.width = `${((currentPage + 1) / pages.length) * 100}%`
       pages.forEach((page, index) => {
         page.setAttribute('aria-hidden', String(index !== currentPage))
+        page.inert = index !== currentPage && !page.classList.contains('under-flip')
       })
     }
 
-    function playPageTurn() {
+    async function playPageTurn() {
       if (!soundOn) return
       const AudioContextClass = window.AudioContext || window.webkitAudioContext
       if (!AudioContextClass) return
       try {
         audioContext ||= new AudioContextClass()
-        if (audioContext.state === 'suspended') audioContext.resume()
+        if (audioContext.state === 'suspended') await audioContext.resume()
         const duration = 0.18
         const frameCount = Math.floor(audioContext.sampleRate * duration)
         const buffer = audioContext.createBuffer(1, frameCount, audioContext.sampleRate)
@@ -155,13 +156,18 @@
       updateBookControls()
       const leavingPage = pages[currentPage]
       const arrivingPage = pages[nextIndex]
+      arrivingPage.hidden = false
+      arrivingPage.inert = true
+      arrivingPage.classList.add('under-flip')
       leavingPage.classList.add(direction > 0 ? 'turning-forward' : 'turning-back')
       playPageTurn()
 
       window.setTimeout(() => {
         leavingPage.hidden = true
         leavingPage.classList.remove('active', 'turning-forward', 'turning-back')
-        arrivingPage.hidden = false
+        leavingPage.inert = true
+        arrivingPage.inert = false
+        arrivingPage.classList.remove('under-flip')
         arrivingPage.classList.add('active', direction > 0 ? 'arriving-forward' : 'arriving-back')
         currentPage = nextIndex
         updateBookControls()
@@ -193,7 +199,10 @@
 
     let touchStart = null
     book.addEventListener('pointerdown', event => {
-      if (event.pointerType === 'touch') touchStart = { x: event.clientX, y: event.clientY }
+      if (event.pointerType === 'touch') {
+        touchStart = { x: event.clientX, y: event.clientY }
+        book.setPointerCapture(event.pointerId)
+      }
     })
     book.addEventListener('pointerup', event => {
       if (!touchStart || event.pointerType !== 'touch') return

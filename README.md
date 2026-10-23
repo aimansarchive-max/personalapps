@@ -9,7 +9,7 @@ A responsive, four-page personal site made with plain HTML, CSS, and a small amo
 - `resources.html` — Searchable AI tools directory
 - `about.html` — About Aiman
 
-All pages share `styles.css` and `script.js`. The script handles the mobile menu, saved light/dark theme, current footer year, resource search/category filters, and the book’s page turning, swipe gestures, and optional generated page sound.
+All pages share `styles.css` and `script.js`. The script handles the mobile menu, saved light/dark theme, current footer year, resource search/category filters, and the book page turning, swipe gestures, and optional generated page sound. Search titles and descriptions, canonical URLs, social sharing cards, structured data, `robots.txt`, and `sitemap.xml` help search engines understand the site.
 
 ## Edit the site
 
@@ -21,7 +21,7 @@ Open this folder in a code editor such as VS Code.
 - Add, remove, or update a tool card in `resources.html`. Use `data-categories="learn research create code"` to control which filters include the card. Keep its official website link in the card.
 - Change the footer contact details and social profiles in each page’s footer. Current links are `query@aimansarchive.xyz`, Facebook `1aimanhusen`, and Instagram `1aimanhusen`.
 - `script.js` contains the small interactive features. You can edit the page text and artwork without changing this file.
-- Update the page title and description in each file’s `<head>` section when you change the page topic.
+- Update the page title, description, canonical URL, and social metadata in each file’s `<head>` section when you change the page topic. Keep `sitemap.xml` current when pages are added or removed.
 
 ## Preview locally
 
@@ -35,7 +35,7 @@ Then visit `http://localhost:8000`. Open the other pages from the navigation.
 
 ## Publish
 
-These are static files. Upload the HTML files, `styles.css`, and `script.js` to any static web host. For Cloudflare Pages, use the project’s root folder as the output directory and leave the build command empty. If you choose to publish the generated `dist/` folder instead, run:
+These are static files. Upload the HTML files, `styles.css`, `script.js`, `robots.txt`, and `sitemap.xml` to any static web host. For Cloudflare Pages, use the project’s root folder as the output directory and leave the build command empty. If you choose to publish the generated `dist/` folder instead, run:
 
 ```sh
 npm run build
