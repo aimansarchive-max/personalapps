@@ -1,134 +1,44 @@
-<!----
-Aiman's Archive
+# Aiman’s Archive
 
-A simple personal website to document:
+A responsive, four-page personal site made with plain HTML, CSS, and a small amount of vanilla JavaScript. It has no front-end framework or runtime dependencies.
 
-learnings
-failures and lessons
-useful AI tools
-personal growth notes
-Project structure
+## Pages
 
-index.html — main page structure
-style.css — all styling and layout
-script.js — dark/light theme toggle logic
-How to edit sections
+- `index.html` — Home
+- `learnings.html` — An illustrated, swipeable eight-page book about how the site was built
+- `resources.html` — Searchable AI tools directory
+- `about.html` — About Aiman
 
-Open index.html and find the sections you want to change.
+All pages share `styles.css` and `script.js`. The script handles the mobile menu, saved light/dark theme, current footer year, resource search/category filters, and the book’s page turning, swipe gestures, and optional generated page sound.
 
-About section
-Find this part:
+## Edit the site
 
-<section id="about" class="section"> <div class="container"> <h2>About</h2> <p class="lead"> I’m building this archive to document... </p> </div> </section>
+Open this folder in a code editor such as VS Code.
 
-Replace the text inside the paragraph with your own introduction.
+- Edit the text and page sections directly in the matching `.html` file.
+- Edit the eight book pages in `learnings.html`. Each page is an `<article class="book-page">`; its illustration is made from HTML elements and CSS, so it can be changed without image software.
+- Edit colors, type, spacing, layout, and phone/tablet styles in `styles.css`. Theme colors are the CSS variables at the top. Responsive rules are in the `@media` blocks at the bottom.
+- Add, remove, or update a tool card in `resources.html`. Use `data-categories="learn research create code"` to control which filters include the card. Keep its official website link in the card.
+- Change the footer contact details and social profiles in each page’s footer. Current links are `query@aimansarchive.xyz`, Facebook `1aimanhusen`, and Instagram `1aimanhusen`.
+- `script.js` contains the small interactive features. You can edit the page text and artwork without changing this file.
+- Update the page title and description in each file’s `<head>` section when you change the page topic.
 
-Learnings section
-Find this block:
+## Preview locally
 
-<section id="learnings" class="section alt"> <div class="container"> <h2>Learnings</h2> <div class="card-grid"> <article class="card"> <span class="tag">Productivity</span> <h3>Small systems beat big motivation.</h3> <p>...</p> </article> </div> </div> </section>
+The site uses no build tool. You can open `index.html` directly in a browser. For a local web server, run this from the project folder if Python is installed:
 
-Edit:
+```sh
+python -m http.server 8000
+```
 
-the title
-the tag
-the paragraph text
-You can keep adding more cards by copying the same article block.
+Then visit `http://localhost:8000`. Open the other pages from the navigation.
 
-Failures / lessons section
-Find the timeline section:
-<!-----
-<section id="failures" class="section"> <div class="container"> <h2>Failures & Lessons</h2>
+## Publish
 
+These are static files. Upload the HTML files, `styles.css`, and `script.js` to any static web host. For Cloudflare Pages, use the project’s root folder as the output directory and leave the build command empty. If you choose to publish the generated `dist/` folder instead, run:
 
-<div class="timeline">  <div class="item">    <div class="date">2025</div>    <div class="content">      <h3>Trying to do too much at once</h3>      <p>...</p>    </div>  </div></div>
-<div class="timeline">
-  <div class="item">
-    <div class="date">2025</div>
-    <div class="content">
-      <h3>Trying to do too much at once</h3>
-      <p>...</p>
-    </div>
-  </div>
-</div> 
----->
-</div> </section>
+```sh
+npm run build
+```
 
-Replace the date, heading, and paragraph with your own failure story.
-
-AI Tools section
-Find:
-
-<section id="tools" class="section alt"> <div class="container"> <h2>Useful AI Tools</h2>
-
-
-<div class="tool-list">  <a href="https://chat.openai.com/" target="_blank" rel="noreferrer">    <div class="tool-card">      <h3>ChatGPT</h3>      <p>...</p>    </div>  </a></div>
-<div class="tool-list">
-  <a href="https://chat.openai.com/" target="_blank" rel="noreferrer">
-    <div class="tool-card">
-      <h3>ChatGPT</h3>
-      <p>...</p>
-    </div>
-  </a>
-</div>
-<div class="tool-list">
-  <a href="https://chat.openai.com/" target="_blank" rel="noreferrer">
-    <div class="tool-card">
-      <h3>ChatGPT</h3>
-      <p>...</p>
-    </div>
-  </a>
-</div>
-</div> </section>
-
-Change:
-
-tool name
-description
-external link
-How to change colors / design
-
-Open style.css and edit the variables near the top:
-
-:root {
---bg: #f5f1ea;
---panel: #fffdf9;
---text: #1d1b18;
---muted: #5e5a54;
---accent: #2c63e6;
-}
-
-You can change:
-
-page background
-text color
-accent color
-card colors
-How to run the site locally
-
-Open index.html directly in the browser, or use a simple local server.
-
-Example with VS Code:
-
-install Live Server extension
-right-click index.html
-click Open with Live Server
-How to upload to GitHub
-
-Initialize Git:
-git init
-
-Add files:
-git add .
-
-Commit:
-git commit -m "Initial commit"
-
-Create a GitHub repo and push:
-git remote add origin https://github.com/yourusername/your-repo.git
-git branch -M main
-git push -u origin main
-
-Notes
-
-This project is designed to be simple and easy to edit manually with basic HTML and CSS knowledge. --->
+The build script copies the static site files into `dist/`; it does not bundle or transform them. Cloudflare Pages can also publish the project root directly without a build step.

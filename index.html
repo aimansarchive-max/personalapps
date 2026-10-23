@@ -1,199 +1,34 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Aiman's personal archive of learnings, mistakes, and useful AI tools."
-    />
-    <title>Aiman's Archive</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header class="topbar">
-      <div class="container nav">
-        <div class="brand">Aiman's Archive</div>
-
-        <nav class="nav-links">
-          <a href="#about">About</a>
-          <a href="#learnings">Learnings</a>
-          <a href="#failures">Failures</a>
-          <a href="#tools">AI Tools</a>
-          <button
-            id="theme-toggle"
-            class="theme-toggle"
-            aria-label="Toggle dark mode"
-          >
-            🌙
-          </button>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <section class="hero">
-        <div class="container hero-inner">
-          <div class="hero-text">
-            <p class="eyebrow">Personal notes / experiments / lessons</p>
-            <h1>Notes from figuring it out.</h1>
-            <p>
-              A place for my learnings, failures, useful AI tools, and the small
-              wins that shaped my thinking.
-            </p>
-
-            <div class="cta-row">
-              <a href="#learnings" class="btn primary">Read my notes</a>
-              <a href="#tools" class="btn secondary">Useful AI tools</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="about" class="section">
-        <div class="container">
-          <h2>About</h2>
-          <p class="lead">
-            I’m building this archive to document what I learn, what I fail at,
-            and what tools help me improve. It’s a personal space for growth,
-            reflection, and experimentation.
-          </p>
-        </div>
-      </section>
-
-      <section id="learnings" class="section alt">
-        <div class="container">
-          <h2>Learnings</h2>
-          <div class="card-grid">
-            <article class="card">
-              <span class="tag">Productivity</span>
-              <h3>Small systems beat big motivation.</h3>
-              <p>
-                Consistency matters more than inspiration. A small routine that
-                you can repeat is far more powerful than a perfect plan.
-              </p>
-            </article>
-
-            <article class="card">
-              <span class="tag">Learning</span>
-              <h3>Build before you perfect.</h3>
-              <p>
-                You learn faster by making imperfect versions and improving them
-                over time. Waiting to feel ready usually delays everything.
-              </p>
-            </article>
-
-            <article class="card">
-              <span class="tag">Mindset</span>
-              <h3>Every skill starts messy.</h3>
-              <p>
-                The early stage feels awkward, but that discomfort is part of
-                the learning process. Growth usually hides inside the chaos.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="failures" class="section">
-        <div class="container">
-          <h2>Failures & Lessons</h2>
-
-          <div class="timeline">
-            <div class="item">
-              <div class="date">2025</div>
-              <div class="content">
-                <h3>Trying to do too much at once</h3>
-                <p>
-                  I spread my attention across too many projects and ended up
-                  finishing none of them well. I learned that deep focus matters
-                  more than volume.
-                </p>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="date">2025</div>
-              <div class="content">
-                <h3>Waiting to feel confident</h3>
-                <p>
-                  I kept delaying action because I wanted to feel ready.
-                  Confidence usually comes after taking the first step, not
-                  before it.
-                </p>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="date">2026</div>
-              <div class="content">
-                <h3>Using tools without a system</h3>
-                <p>
-                  I realized AI tools are useful only when I have a clear goal
-                  and a workflow. Without structure, they just add noise.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="tools" class="section alt">
-        <div class="container">
-          <h2>Useful AI Tools</h2>
-
-          <div class="tool-list">
-            <a href="https://chat.openai.com/" target="_blank" rel="noreferrer">
-              <div class="tool-card">
-                <h3>ChatGPT</h3>
-                <p>
-                  Brainstorming, writing help, learning support, and quick
-                  explanations.
-                </p>
-              </div>
-            </a>
-
-            <a
-              href="https://www.perplexity.ai/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div class="tool-card">
-                <h3>Perplexity</h3>
-                <p>Fast research and answers with source-backed summaries.</p>
-              </div>
-            </a>
-
-            <a
-              href="https://www.midjourney.com/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div class="tool-card">
-                <h3>Midjourney</h3>
-                <p>Creative image generation and visual exploration.</p>
-              </div>
-            </a>
-
-            <a href="https://www.notion.so/" target="_blank" rel="noreferrer">
-              <div class="tool-card">
-                <h3>Notion</h3>
-                <p>
-                  Organizing notes, ideas, and personal knowledge in one place.
-                </p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="container">
-        <p>© 2026 Aiman's Archive</p>
-      </div>
-    </footer>
-
-    <script src="script.js"></script>
-  </body>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ec">
+  <meta name="description" content="Aiman’s personal archive of lessons learned, tools tested, mistakes filed, and philosophical conclusions reached with insufficient evidence.">
+  <meta property="og:title" content="Aiman’s Archive — Notes from figuring it out">
+  <meta property="og:description" content="Lessons learned, tools tested, and philosophy lightly roasted.">
+  <meta property="og:type" content="website">
+  <title>Aiman’s Archive — Notes from figuring it out</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body id="top">
+  <header class="topbar"><nav class="nav wrap" aria-label="Main navigation">
+    <a class="brand" href="index.html" aria-label="Aiman’s Archive home"><span class="brand-mark" aria-hidden="true">a<span>.</span></span><span class="brand-type">aiman’s archive</span></a>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu">☰</button>
+    <div class="navlinks" id="site-menu"><a class="current" aria-current="page" href="index.html">Home</a><a href="learnings.html">Learnings</a><a href="resources.html">Resources</a><a href="about.html">About</a><a class="nav-cta" href="mailto:query@aimansarchive.xyz">Say hello <span>↗</span></a><button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false"><span aria-hidden="true">☾</span><span>Dark</span></button></div>
+  </nav></header>
+  <main>
+    <section class="hero wrap"><div class="hero-copy"><div class="eyebrow"><span class="eyebrow-star">✳</span>A personal archive of figuring it out</div><h1>I learned a thing.<br>Then forgot it.<br><em>So I wrote it down.</em></h1><p>Lessons learned, tools tested, and philosophical conclusions reached with absolutely insufficient evidence. Browse freely. The confidence is part of the joke.</p><div class="hero-actions"><a class="button" href="learnings.html">Read the notes <span>↘</span></a><a class="button secondary" href="about.html">Meet the archivist</a></div><div class="hero-caption"><span class="status-dot"></span>Currently collecting useful mistakes</div></div>
+      <div class="hero-art" role="img" aria-label="Abstract illustration of a person surrounded by ideas"><div class="art-sun"></div><div class="art-window"><span>THINKING, PROBABLY</span><div class="art-person"><i></i><b></b></div><div class="art-scribble scribble-one">maybe?</div><div class="art-scribble scribble-two">✳</div></div><div class="art-note">FIELD NOTES<strong>№ 001—∞</strong></div></div>
+    </section>
+    <div class="wrap ticker" aria-label="Site themes"><span>LEARNING IN PUBLIC</span><i>✳</i><span>TOOLS WITH CAVEATS</span><i>✳</i><span>PHILOSOPHY, LIGHTLY ROASTED</span><i>✳</i><span>LEARNING IN PUBLIC</span></div>
+    <section class="wrap section"><div class="section-head"><div><div class="label">The archive, in three convenient piles</div><h2>Make the confusion<br>somewhat useful.</h2></div><p class="section-note">A field guide to the experiment of being a person with Wi-Fi.</p></div>
+      <div class="collection-grid"><a class="collection-card collection-learn" href="learnings.html"><span class="collection-index">01 / NOTES</span><span class="collection-doodle" aria-hidden="true">✳</span><h3>Things I’ve learned</h3><p>Small systems, unfinished thoughts, and lessons I learned the hard way.</p><span class="collection-link">Read the log ↗</span></a><a class="collection-card collection-tools" href="resources.html"><span class="collection-index">02 / TOOLS</span><span class="collection-doodle" aria-hidden="true">⌘</span><h3>Tools I’ve tried</h3><p>A practical guide to AI helpers, their uses, and their many limitations.</p><span class="collection-link">Open the toolbox ↗</span></a><a class="collection-card collection-about" href="about.html"><span class="collection-index">03 / PERSON</span><span class="collection-doodle" aria-hidden="true">☺</span><h3>Philosophy, lightly roasted</h3><p>Loose thoughts about life. No credentials, several opinions.</p><span class="collection-link">Meet Aiman ↗</span></a></div>
+    </section>
+    <section class="quote-band"><div class="wrap quote-inner"><span class="label">A working theory</span><blockquote>“You don’t need a five-year plan. A <em>Tuesday plan</em> would already be pretty impressive.”</blockquote><span class="quote-byline">— notes from the ongoing experiment</span></div></section>
+    <section class="wrap contact-strip"><div><div class="label">Have a thought, tool, or correction?</div><h2>Send it into the archive.</h2></div><a class="button" href="mailto:query@aimansarchive.xyz">Write to Aiman <span>↗</span></a></section>
+  </main>
+  <footer class="footer"><div class="wrap footer-top"><div><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true">a<span>.</span></span><span class="brand-type">aiman’s archive</span></a><p>Notes from figuring it out. Filed under: ongoing.</p></div><div class="footer-links"><div><span class="footer-label">Explore</span><a href="learnings.html">Learnings</a><a href="resources.html">Resources</a><a href="about.html">About Aiman</a></div><div><span class="footer-label">Find me elsewhere</span><a href="https://www.facebook.com/1aimanhusen" target="_blank" rel="noopener noreferrer">Facebook ↗</a><a href="https://www.instagram.com/1aimanhusen" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="mailto:query@aimansarchive.xyz">Email ↗</a></div></div></div><div class="wrap footer-bottom"><span>© <span data-year></span> Aiman’s Archive · Curiosity, filed.</span><a href="#top">Back to top ↑</a></div></footer>
+</body>
 </html>
