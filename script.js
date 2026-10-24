@@ -214,4 +214,73 @@
     book.addEventListener('pointercancel', () => { touchStart = null })
     updateBookControls()
   }
+
+  // Optional on-site Gemma chat, backed by a same-origin Cloudflare Pages Function.
+  const chat = document.querySelector('.gemma-chat')
+  const launcher = document.querySelector('.gemma-launcher')
+  const closeButton = document.querySelector('.gemma-close')
+  const chatForm = document.querySelector('[data-gemma-form]')
+  const chatInput = document.querySelector('[data-gemma-input]')
+  const chatLog = document.querySelector('[data-gemma-log]')
+  const sendButton = document.querySelector('[data-gemma-send]')
+
+  if (chat && launcher && closeButton && chatForm && chatInput && chatLog && sendButton) {
+    const messages = []
+    const setChatOpen = open => {
+      chat.hidden = !open
+      launcher.setAttribute('aria-expanded', String(open))
+      if (open) chatInput.focus()
+      else launcher.focus()
+    }
+    const addMessage = (role, content) => {
+      const message = document.createElement('p')
+      message.className = `gemma-message ${role}`
+      message.textContent = content
+      chatLog.append(message)
+      chatLog.scrollTop = chatLog.scrollHeight
+      return message
+    }
+
+    launcher.addEventListener('click', () => setChatOpen(chat.hidden))
+    closeButton.addEventListener('click', () => setChatOpen(false))
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !chat.hidden) setChatOpen(false)
+    })
+
+    chatForm.addEventListener('submit', async event => {
+      event.preventDefault()
+      const text = chatInput.value.trim()
+      if (!text || sendButton.disabled) return
+
+      messages.push({ role: 'user', content: text })
+      addMessage('user', text)
+      chatInput.value = ''
+      chatInput.disabled = true
+      sendButton.disabled = true
+      sendButton.textContent = 'Thinking…'
+      const pending = addMessage('assistant', 'Thinking…')
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: messages.slice(-8) })
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error || 'The chat is temporarily unavailable.')
+        if (typeof data.reply !== 'string' || !data.reply.trim()) throw new Error('Gemma did not return a response. Please try again.')
+        pending.textContent = data.reply
+        messages.push({ role: 'assistant', content: data.reply })
+      } catch (error) {
+        pending.textContent = error.message || 'The chat is temporarily unavailable. Please try again later.'
+      } finally {
+        chatInput.disabled = false
+        sendButton.disabled = false
+        sendButton.textContent = 'Send ↗'
+        chatInput.focus()
+        chatLog.scrollTop = chatLog.scrollHeight
+      }
+    })
+  }
 })()
+
