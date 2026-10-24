@@ -29,12 +29,13 @@ function allowedByRateLimit(ip, now) {
 }
 
 export async function onRequestPost({ request, env }) {
+  const ai = env.AI || env.Ai
   const origin = request.headers.get('Origin')
   if (origin && origin !== new URL(request.url).origin) {
     return json({ error: 'This request could not be verified.' }, 403)
   }
 
-  if (!env.AI) {
+  if (!ai) {
     return json({ error: 'Gemma is not connected yet. Please check back soon.' }, 503)
   }
 
@@ -85,7 +86,7 @@ export async function onRequestPost({ request, env }) {
   ]
 
   try {
-    const result = await env.AI.run(MODEL, { messages: prompt, max_tokens: MAX_OUTPUT_TOKENS })
+    const result = await ai.run(MODEL, { messages: prompt, max_tokens: MAX_OUTPUT_TOKENS })
     const reply = typeof result?.response === 'string' ? result.response.trim() : ''
     if (!reply) return json({ error: 'Gemma returned an empty answer. Please try again.' }, 502)
     return json({ reply })
