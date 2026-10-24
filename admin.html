@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f5f3ec">
+  <title>Private dashboard · Aiman’s Archive</title><link rel="stylesheet" href="styles.css?v=2.2.0"><link rel="stylesheet" href="admin.css?v=1.0.0"><script src="admin.js?v=1.0.0" defer></script>
+</head>
+<body class="crm-body">
+  <main class="crm-shell" id="app">
+    <header class="crm-header"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">a</span><span class="brand-type">aiman’s archive</span></a><span class="crm-private">PRIVATE WORKSPACE</span></header>
+    <section class="crm-login" id="login-view" hidden>
+      <div class="crm-kicker">THE BACK OFFICE · JUST FOR YOU</div><h1>Your archive,<br><em>behind the scenes.</em></h1><p>Sign in to manage enquiries, follow-ups, and the words on your homepage.</p>
+      <form id="login-form"><label>Email address<input name="email" type="email" autocomplete="username" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button class="crm-primary" type="submit">Open dashboard <span>↗</span></button><p class="crm-message" id="login-message" role="status"></p></form>
+    </section>
+    <section class="crm-dashboard" id="dashboard-view" hidden>
+      <div class="crm-heading"><div><div class="crm-kicker">YOUR WEBSITE CONTROL ROOM</div><h1>Good day, Aiman.</h1><p>People, follow-ups, and a few words that make the website yours.</p></div><button class="crm-quiet" id="logout">Sign out ↗</button></div>
+      <div class="crm-stats" id="stats"></div>
+      <nav class="crm-tabs" aria-label="Dashboard sections"><button class="active" data-panel="inbox">Inbox</button><button data-panel="tasks">Follow-ups</button><button data-panel="content">Website copy</button></nav>
+      <section class="crm-panel" data-view="inbox"><div class="crm-panel-head"><div><span class="crm-kicker">RECENT ENQUIRIES</span><h2>Contacts</h2></div><input id="contact-search" type="search" placeholder="Search contacts" aria-label="Search contacts"></div><div class="crm-table-wrap"><table class="crm-table"><thead><tr><th>Person</th><th>Message</th><th>Status</th><th>Follow-up</th></tr></thead><tbody id="contacts-body"></tbody></table></div><p class="crm-empty" id="contacts-empty" hidden>No enquiries yet. Your next one can come from the contact form.</p></section>
+      <section class="crm-panel" data-view="tasks" hidden><div class="crm-panel-head"><div><span class="crm-kicker">DON’T LET IT FLOAT AWAY</span><h2>Follow-ups</h2></div></div><form class="task-form" id="task-form"><input name="title" placeholder="What needs doing?" required maxlength="180"><input name="due_at" type="date" aria-label="Due date"><button class="crm-primary" type="submit">Add task +</button></form><div id="tasks-list" class="tasks-list"></div></section>
+      <section class="crm-panel" data-view="content" hidden><div class="crm-panel-head"><div><span class="crm-kicker">YOUR WORDS, YOUR FRONT PAGE</span><h2>Website copy</h2></div></div><form id="content-form" class="content-form"><label>Homepage headline<textarea name="hero_title" rows="2" maxlength="240" required></textarea></label><label>Homepage introduction<textarea name="hero_description" rows="3" maxlength="600" required></textarea></label><label>Home page quote<textarea name="home_quote" rows="2" maxlength="240" required></textarea></label><button class="crm-primary" type="submit">Save website copy <span>↗</span></button><p class="crm-message" id="content-message" role="status"></p></form></section>
+      <div class="crm-toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+    <footer class="crm-footer"><span>PRIVATE · SECURE SESSION</span><a href="index.html">← Back to the public site</a></footer>
+  </main>
+</body></html>

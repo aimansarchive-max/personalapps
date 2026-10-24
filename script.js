@@ -53,6 +53,36 @@
     item.textContent = new Date().getFullYear()
   })
 
+  // The home-page copy is editable from the private dashboard.
+  if (document.querySelector('[data-site-copy]')) {
+    fetch('/api/content', { headers: { accept: 'application/json' } }).then(response => response.ok ? response.json() : null).then(data => {
+      if (!data?.content) return
+      document.querySelectorAll('[data-site-copy]').forEach(node => {
+        const value = data.content[node.dataset.siteCopy]
+        if (typeof value === 'string' && value.trim()) node.textContent = value
+      })
+    }).catch(() => {})
+  }
+
+  const contactForm = document.querySelector('#public-contact-form')
+  if (contactForm) contactForm.addEventListener('submit', async event => {
+    event.preventDefault()
+    const feedback = document.querySelector('#contact-feedback')
+    const submit = contactForm.querySelector('button[type="submit"]')
+    const formData = new FormData(contactForm)
+    const payload = Object.fromEntries(formData)
+    feedback.textContent = 'Sending your note…'
+    submit.disabled = true
+    try {
+      const response = await fetch('/api/contact', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Could not send your note.')
+      feedback.textContent = 'It’s in the archive. Thanks for writing.'
+      contactForm.reset()
+    } catch (error) { feedback.textContent = error.message || 'Could not send your note. Please try again.' }
+    finally { submit.disabled = false }
+  })
+
   const cards = [...document.querySelectorAll('[data-tool-grid] .tool-card')]
   if (cards.length) {
     let activeFilter = 'all'

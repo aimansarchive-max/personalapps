@@ -43,3 +43,24 @@ npm run build
 
 The build script copies the static site files into `dist/`; it does not bundle or transform them. Cloudflare Pages can also publish the project root directly without a build step.
 
+## Private CRM dashboard (Cloudflare Pages)
+
+The private dashboard is at `/admin.html` (noindex). It includes a contact inbox and pipeline, follow-up tasks, and editable homepage copy. The About page contact form saves submissions to the CRM. The interface and site remain plain HTML, CSS, and vanilla JavaScript; the private API runs as Cloudflare Pages Functions and stores data in D1.
+
+### One-time Cloudflare setup
+
+1. In Cloudflare Dashboard, open **Workers & Pages → D1 SQL Database → Create database**. Name it `aimansarchive-crm`.
+2. Apply `migrations/0001_crm.sql` to that database in the D1 **Console**. This creates the CRM tables and default homepage copy.
+3. Open **Workers & Pages → Pages → personalapps → Settings → Functions → Bindings**. Add a **D1 database** binding named `CRM_DB` and choose `aimansarchive-crm`.
+4. Add these three **Secrets** under the Pages project's **Settings → Variables and Secrets**:
+   - `CRM_ADMIN_EMAIL` — the email you will use to sign in.
+   - `CRM_ADMIN_PASSWORD` — a unique, long password.
+   - `CRM_SESSION_SECRET` — a random secret of at least 32 bytes. Generate locally with `node -e "console.log(require('node:crypto').randomBytes(48).toString('base64url'))"`.
+5. Trigger a new Pages deployment so the binding and secrets are available to Functions.
+6. Open `https://aimansarchive.xyz/admin.html` and sign in. New messages sent through the About page contact form appear in Contacts.
+
+Never put the admin password or session secret in HTML, JavaScript, GitHub, or a public `.env` file. Dashboard access is a private-cookie session; the database binding and credentials must be configured in Cloudflare. The API intentionally returns a setup error until the binding and secrets exist.
+
+### Local preview
+
+`npm run build` includes the Pages Functions under `dist/functions/`. The CRM APIs require Cloudflare Pages Functions and D1; opening the HTML directly cannot run the private data layer. For a complete local CRM preview, use Cloudflare's Wrangler Pages dev server after configuring a local D1 database and bindings.
