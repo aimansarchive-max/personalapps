@@ -266,7 +266,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: messages.slice(-8) })
         })
-        const data = await response.json()
+        const responseText = await response.text()
+        let data
+        try {
+          data = JSON.parse(responseText)
+        } catch {
+          throw new Error(`The chat service returned an unexpected page (HTTP ${response.status}). Please try again shortly.`)
+        }
         if (!response.ok) throw new Error(data.error || 'The chat is temporarily unavailable.')
         if (typeof data.reply !== 'string' || !data.reply.trim()) throw new Error('Gemma did not return a response. Please try again.')
         pending.textContent = data.reply

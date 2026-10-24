@@ -28,7 +28,7 @@ function allowedByRateLimit(ip, now) {
   return true
 }
 
-export async function onRequestPost({ request, env }) {
+async function handleChatPost({ request, env }) {
   const ai = env.AI || env.Ai
   const origin = request.headers.get('Origin')
   if (origin && origin !== new URL(request.url).origin) {
@@ -95,7 +95,8 @@ export async function onRequestPost({ request, env }) {
   }
 }
 
-export async function onRequest({ request }) {
+export async function onRequest(context) {
+  if (context.request.method === 'POST') return handleChatPost(context)
   return json({ error: 'Use POST to send a message.' }, 405)
 }
 
