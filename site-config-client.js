@@ -17,7 +17,7 @@
     document.querySelectorAll('.brand-type').forEach(node => { node.textContent = site.brand || 'aiman’s archive' })
     document.querySelectorAll('.brand-mark').forEach(node => { node.textContent = site.brandMark || 'a' })
     document.querySelectorAll('.footer-top > div:first-child > p').forEach(node => { node.textContent = site.tagline || '' })
-    const labels = { 'index.html':site.navHome, 'learnings.html':site.navLearning, 'resources.html':site.navResources, 'about.html':site.navAbout }
+    const labels = { 'index.html':site.navHome, 'learnings.html':site.navLearning, 'resources.html':site.navResources, 'about.html':site.navAbout, 'posts.html':site.navPosts }
     document.querySelectorAll('.navlinks a, .footer-links a').forEach(node => {
       const path = node.getAttribute('href')?.split('#')[0]?.split('/').pop()
       if (labels[path]) node.textContent = labels[path]
@@ -36,11 +36,13 @@
     const color = value => /^#[0-9a-f]{6}$/i.test(value || '') ? value : null
     const palette = { '--paper':color(site.paper), '--ink':color(site.ink), '--green':color(site.green), '--lime':color(site.lime) }
     theme.textContent = `:root:not([data-theme="dark"]){${Object.entries(palette).filter(([,v])=>v).map(([k,v])=>`${k}:${v}`).join(';')}}`
-    const isHome = /(?:^|\/)index\.html$/.test(location.pathname) || location.pathname.endsWith('/')
-    const isLearning = /learnings\.html$/.test(location.pathname)
-    const isResources = /resources\.html$/.test(location.pathname)
-    const isAbout = /about\.html$/.test(location.pathname)
-    const intro = document.querySelector('.page-intro')
+    const pageSlug=location.pathname.replace(/\/+$/,'').split('/').pop()
+    const isHome = !pageSlug || pageSlug==='index' || pageSlug==='index.html'
+    const isLearning = pageSlug==='learnings'||pageSlug==='learnings.html'
+    const isResources = pageSlug==='resources'||pageSlug==='resources.html'
+    const isAbout = pageSlug==='about'||pageSlug==='about.html'
+    const isPostsIndex = pageSlug==='posts'||pageSlug==='posts.html'
+    const intro = document.querySelector(isLearning?'.book-intro':'.page-intro')
     const setIntro = (data, includeStamp) => {
       if (!intro || !data) return
       text('.eyebrow', data.kicker, intro)
@@ -63,10 +65,14 @@
       ;(home.collections || []).forEach((item,i)=>{const card=cards[i]; if(!card)return;text('h3',item.title,card);text('p',item.description,card);text('.collection-link',item.link,card)})
       text('.section-head h2', home.sectionTitle, document)
       text('.section-note', home.sectionNote, document)
+      text('[data-recent-title]',home.recentTitle)
+      text('[data-recent-description]',home.recentDescription)
       text('.quote-inner blockquote', `“${home.quote || ''}”`)
       text('.quote-byline', home.quoteByline)
       text('.contact-strip .label', home.contactLabel)
       text('.contact-strip h2', home.contactHeadline)
+      const recentGrid=document.querySelector('[data-recent-posts]')
+      if(recentGrid)fetch('/api/posts',{cache:'no-store'}).then(response=>response.ok?response.json():{posts:[]}).then(data=>{const posts=(data.posts||[]).slice(0,3);recentGrid.replaceChildren(...posts.map(post=>{const card=document.createElement('a');card.className='post-teaser';card.href=`post.html?slug=${encodeURIComponent(post.slug)}`;if(post.imageUrl){const img=document.createElement('img');img.src=post.imageUrl;img.alt=post.imageAlt||'';img.loading='lazy';card.append(img)}const category=document.createElement('span');category.className='label';category.textContent=post.category||'FIELD NOTE';const title=document.createElement('h3');title.textContent=post.title;const summary=document.createElement('p');summary.textContent=post.summary||'';card.append(category,title,summary);return card}));if(!posts.length)recentGrid.innerHTML='<p class="no-posts">New notes are brewing. Apparently thinking takes time.</p>'}).catch(()=>{})
     }
     if (isLearning) {
       setIntro(learning, true)
@@ -81,8 +87,8 @@
         if (paragraphs[1]) paragraphs[1].textContent = chapter.body2 || ''
         text('.margin-note', chapter.note, page)
       })
-      text('.small-cta h2', learning.afterTitle)
-      text('.small-cta > p', learning.afterDescription)
+      text('.book-after h2', learning.afterTitle)
+      text('.book-after p', learning.afterDescription)
     }
     if (isResources) {
       setIntro(resources)
@@ -119,7 +125,10 @@
       text('#contact h2', about.contactHeading)
       text('#contact > div > p', about.contactDescription)
     }
-    const pageKey=isHome?'home':isLearning?'learning':isResources?'resources':isAbout?'about':null
+    const layoutKey=isHome?'home':isLearning?'learning':isResources?'resources':isAbout?'about':null
+    const layout=layoutKey==='home'?config.layout?.home:config.layout?.pages?.[layoutKey]
+    if(layout){const nodes=layoutKey==='home'?{hero:document.querySelector('.hero'),ticker:document.querySelector('.ticker'),collections:document.querySelector('main > .section'),recentPosts:document.querySelector('.recent-posts'),quote:document.querySelector('.quote-band'),contact:document.querySelector('.contact-strip')}:layoutKey==='learning'?{intro:document.querySelector('.book-intro'),book:document.querySelector('.book-section'),cta:document.querySelector('.book-after')}:layoutKey==='resources'?{intro:document.querySelector('.page-intro'),tools:document.querySelector('.resource-section'),disclaimer:document.querySelector('.note')}: {intro:document.querySelector('.page-intro'),bio:document.querySelector('.about-page'),values:document.querySelector('.about-values'),quote:document.querySelector('.quote-band'),contact:document.querySelector('.public-contact')};for(const [id,node]of Object.entries(nodes))if(node)node.hidden=layout.visible?.[id]===false;for(const id of layout.order||[])if(nodes[id])document.querySelector('main')?.append(nodes[id])}
+    const pageKey=layoutKey||(isPostsIndex?'posts':null)
     if (pageKey && seo[pageKey]) {
       document.title=seo[pageKey].title
       const description=document.querySelector('meta[name="description"]')

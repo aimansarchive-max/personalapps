@@ -1,4 +1,5 @@
 import { loadSiteConfig, saveSiteConfig } from '../../site-config.js'
+import { loadPosts, savePosts, normalisePost } from '../../post-store.js'
 
 const json = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...headers } })
 const cookieName = '__Host-aiman_crm'
@@ -66,6 +67,30 @@ export async function onRequest({ request, env, params }) {
   if (!secret || !await verifyCookie(request, secret)) return json({ error: 'Please sign in.' }, 401)
 
   try {
+    if (path === 'posts' && method === 'GET') return json({ posts: (await loadPosts(env.CRM_DB)).sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||''))) })
+    if (path === 'posts' && method === 'POST') {
+      if (!sameOrigin(request)) return json({ error: 'Request origin rejected.' }, 403)
+      const data = await body(request), posts = await loadPosts(env.CRM_DB)
+      if (posts.length >= 250) return json({ error: 'The archive is full. Remove an old draft before adding another post.' }, 400)
+      const post = normalisePost(data)
+      if (posts.some(item=>item.slug===post.slug)) return json({ error: 'That URL slug is already in use. Choose a unique one.' }, 409)
+      post.id = crypto.randomUUID()
+      posts.push(post)
+      await savePosts(env.CRM_DB, posts)
+      return json({ ok:true, post }, 201)
+    }
+    const postMatch = path.match(/^posts\/([a-f0-9-]{36})$/)
+    if (postMatch && (method === 'PATCH' || method === 'DELETE')) {
+      if (!sameOrigin(request)) return json({ error: 'Request origin rejected.' }, 403)
+      const posts = await loadPosts(env.CRM_DB), index = posts.findIndex(item=>item.id===postMatch[1])
+      if (index < 0) return json({ error:'Post not found.' }, 404)
+      if (method === 'DELETE') { posts.splice(index,1); await savePosts(env.CRM_DB,posts); return json({ ok:true }) }
+      const data=await body(request), post=normalisePost(data,posts[index])
+      if (posts.some((item,i)=>i!==index&&item.slug===post.slug)) return json({ error:'That URL slug is already in use. Choose a unique one.' },409)
+      posts[index]=post
+      await savePosts(env.CRM_DB,posts)
+      return json({ ok:true, post })
+    }
     if (path === 'dashboard' && method === 'GET') {
       const [total, fresh, qualified, openTasks, recent] = await Promise.all([
         env.CRM_DB.prepare('SELECT COUNT(*) AS n FROM contacts').first(),

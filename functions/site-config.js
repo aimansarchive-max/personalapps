@@ -3,7 +3,7 @@ import { SITE_DEFAULTS } from './site-defaults.js'
 export async function loadSiteConfig(db) {
   const stored = await db.prepare("SELECT content_value FROM site_content WHERE content_key='site_config'").first()
   if (stored?.content_value) {
-    try { return JSON.parse(stored.content_value) } catch { /* Repair an invalid record from the safe defaults below. */ }
+    try { return mergeConfig(structuredClone(SITE_DEFAULTS), JSON.parse(stored.content_value)) } catch { /* Repair an invalid record from the safe defaults below. */ }
   }
   const legacy = await db.prepare("SELECT content_key,content_value FROM site_content WHERE content_key IN ('hero_title','hero_description','home_quote')").all()
   const config = structuredClone(SITE_DEFAULTS)
@@ -16,13 +16,26 @@ export async function loadSiteConfig(db) {
   return config
 }
 
+function mergeConfig(base, saved) {
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return saved ?? base
+  for (const [key, value] of Object.entries(saved)) {
+    base[key] = value && typeof value === 'object' && !Array.isArray(value)
+      ? mergeConfig(base[key] && typeof base[key] === 'object' && !Array.isArray(base[key]) ? base[key] : {}, value)
+      : value
+  }
+  return base
+}
+
 export function validateSiteConfig(config) {
   if (!config || typeof config !== 'object' || Array.isArray(config)) return 'Invalid site settings.'
-  if (!config.site || !config.home || !config.learning || !config.resources || !config.about || !config.seo) return 'A required site section is missing.'
+  if (!config.site || !config.home || !config.learning || !config.resources || !config.about || !config.seo || !config.layout?.home) return 'A required site section is missing.'
   if (!Array.isArray(config.resources.tools) || config.resources.tools.length > 40) return 'Keep the tools list to 40 entries or fewer.'
   if (!Array.isArray(config.learning.chapters) || config.learning.chapters.length !== 7) return 'The interactive book needs exactly seven chapter records after its cover.'
   if (!Array.isArray(config.home.collections) || config.home.collections.length !== 3) return 'Keep the three homepage destination cards in place; you can edit their copy.'
   if (!Array.isArray(config.about.values) || config.about.values.length > 8) return 'Keep the about values list to eight or fewer.'
+  if (!Array.isArray(config.layout.home.order) || config.layout.home.order.length !== 6 || new Set(config.layout.home.order).size !== 6 || config.layout.home.order.some(id => !['hero','ticker','collections','recentPosts','quote','contact'].includes(id))) return 'The homepage section order is invalid.'
+  const pageSections={learning:['intro','book','cta'],resources:['intro','tools','disclaimer'],about:['intro','bio','values','quote','contact']}
+  for(const [page,allowed] of Object.entries(pageSections)){const order=config.layout.pages?.[page]?.order;if(!Array.isArray(order)||order.length!==allowed.length||new Set(order).size!==allowed.length||order.some(id=>!allowed.includes(id)))return `The ${page} page section order is invalid.`}
   const serialized = JSON.stringify(config)
   if (serialized.length > 80000) return 'The complete site settings exceed 80 KB.'
   const safeUrl = value => {

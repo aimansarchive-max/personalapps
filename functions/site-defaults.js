@@ -1,7 +1,7 @@
 export const SITE_DEFAULTS = {
   site: {
     brand: 'aiman’s archive', brandMark: 'a', tagline: 'Notes from figuring it out. Filed under: ongoing.', email: 'query@aimansarchive.xyz',
-    navHome:'Home', navLearning:'Learnings', navResources:'Resources', navAbout:'About', navContact:'Say hello',
+    navHome:'Home', navLearning:'Learnings', navResources:'Resources', navAbout:'About', navPosts:'Posts', navContact:'Say hello',
     ticker1:'LEARNING IN PUBLIC',ticker2:'TOOLS WITH CAVEATS',ticker3:'PHILOSOPHY, LIGHTLY ROASTED',
     facebook: 'https://www.facebook.com/1aimanhusen', instagram: 'https://www.instagram.com/1aimanhusen',
     paper: '#f5f3ec', ink: '#20231f', green: '#315947', lime: '#d8f36c'
@@ -71,6 +71,18 @@ export const SITE_DEFAULTS = {
     home:{title:'Aiman Archive: Personal Learning Notes, AI Tools and Ideas',description:'Explore a personal archive of learning notes, practical AI tool guides, creative experiments, and honest reflections on figuring things out.'},
     learning:{title:'How I Built This Website: HTML, CSS and JavaScript',description:'Read an illustrated, interactive eight-page guide to building Aiman Archive with responsive HTML, CSS, and vanilla JavaScript.'},
     resources:{title:'AI Tools Directory: Practical Uses and Official Links',description:'Explore AI tools for writing, research, learning, image creation, coding, and presentation slides. See practical use ideas and official links.'},
-    about:{title:'About Aiman: A Personal Archive of Learning',description:'Meet Aiman and explore ideas behind this personal archive of practical learning, creative experiments, AI tools, and lightly roasted philosophy.'}
+    about:{title:'About Aiman: A Personal Archive of Learning',description:'Meet Aiman and explore ideas behind this personal archive of practical learning, creative experiments, AI tools, and lightly roasted philosophy.'},
+    posts:{title:'Posts and Notes · Aiman’s Archive',description:'Personal notes, useful discoveries, creative experiments, and philosophy from Aiman’s Archive.'}
   }
 }
+
+SITE_DEFAULTS.layout = {
+  home: { order:['hero','ticker','collections','recentPosts','quote','contact'], visible:{hero:true,ticker:true,collections:true,recentPosts:true,quote:true,contact:true} },
+  pages: {
+    learning:{order:['intro','book','cta'],visible:{intro:true,book:true,cta:true}},
+    resources:{order:['intro','tools','disclaimer'],visible:{intro:true,tools:true,disclaimer:true}},
+    about:{order:['intro','bio','values','quote','contact'],visible:{intro:true,bio:true,values:true,quote:true,contact:true}}
+  }
+}
+SITE_DEFAULTS.home.recentTitle = 'Fresh from the notebook.'
+SITE_DEFAULTS.home.recentDescription = 'New notes from the ongoing experiment.'
