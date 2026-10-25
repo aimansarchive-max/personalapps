@@ -1,3 +1,5 @@
+import { loadSiteConfig, saveSiteConfig } from '../../site-config.js'
+
 const json = (data, status = 200, headers = {}) => new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...headers } })
 const cookieName = '__Host-aiman_crm'
 const enc = new TextEncoder()
@@ -114,6 +116,14 @@ export async function onRequest({ request, env, params }) {
       const data = await body(request)
       const allowed = ['hero_title','hero_description','home_quote']
       for (const key of allowed) if (typeof data[key] === 'string') await env.CRM_DB.prepare('INSERT INTO site_content(content_key,content_value,updated_at) VALUES(?,?,CURRENT_TIMESTAMP) ON CONFLICT(content_key) DO UPDATE SET content_value=excluded.content_value,updated_at=CURRENT_TIMESTAMP').bind(key, clean(data[key], key === 'hero_description' ? 600 : 240)).run()
+      return json({ ok: true })
+    }
+    if (path === 'site-config' && method === 'GET') return json({ config: await loadSiteConfig(env.CRM_DB) })
+    if (path === 'site-config' && method === 'PUT') {
+      if (!sameOrigin(request)) return json({ error: 'Request origin rejected.' }, 403)
+      const config = await body(request)
+      try { await saveSiteConfig(env.CRM_DB, config) }
+      catch (error) { return json({ error: error.message || 'Invalid site settings.' }, 400) }
       return json({ ok: true })
     }
     return json({ error: 'Not found.' }, 404)

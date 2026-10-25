@@ -45,7 +45,7 @@ The build script copies the static site files into `dist/`; it does not bundle o
 
 ## Private CRM dashboard (Cloudflare Pages)
 
-The private dashboard is at `/admin.html` (noindex). It includes a contact inbox and pipeline, follow-up tasks, and editable homepage copy. The About page contact form saves submissions to the CRM. The interface and site remain plain HTML, CSS, and vanilla JavaScript; the private API runs as Cloudflare Pages Functions and stores data in D1.
+The private dashboard is at `/admin.html` (noindex). It includes a contact inbox and pipeline, private contact notes, follow-up tasks, and a website editor. In **Site control**, edit site-wide identity, navigation and social links, theme colors, homepage copy and collection cards, all seven chapters in the interactive learning book, AI resource listings and official links, About/philosophy copy and value cards, plus SEO titles and descriptions for all four pages. Save changes to publish them through the D1-backed content API; the public pages fetch the latest settings without a stale cache. The About page contact form saves submissions to the CRM. The interface and site remain plain HTML, CSS, and vanilla JavaScript; the private API runs as Cloudflare Pages Functions and stores data in D1. Page structure and custom illustrations remain part of the source files.
 
 ### One-time Cloudflare setup
 

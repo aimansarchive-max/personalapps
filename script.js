@@ -83,7 +83,7 @@
     finally { submit.disabled = false }
   })
 
-  const cards = [...document.querySelectorAll('[data-tool-grid] .tool-card')]
+  let cards = [...document.querySelectorAll('[data-tool-grid] .tool-card')]
   if (cards.length) {
     let activeFilter = 'all'
     const search = document.querySelector('[data-search]')
@@ -105,6 +105,11 @@
       if (count) count.textContent = visibleCount
       if (empty) empty.hidden = visibleCount !== 0
     }
+
+    document.addEventListener('site-tools-updated', () => {
+      cards = [...document.querySelectorAll('[data-tool-grid] .tool-card')]
+      filterCards()
+    })
 
     filterButtons.forEach(button => button.addEventListener('click', () => {
       activeFilter = button.dataset.filter
